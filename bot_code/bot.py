@@ -16,8 +16,6 @@ import datetime
 import sys
 sys.path.append(os.getcwd())
 
-from bot_code.story_handler import StoriesHandler  # StoriesHandler (= Passage retrieval)
-
 from bot_code.Chatbot import Chatbot
 
 CONFPATH = "config.ini"
@@ -80,7 +78,8 @@ class Bot:
         self.dp.add_handler(CommandHandler("start", start))  # function1 : /start
         self.dp.add_handler(CommandHandler("help", help))    # function2 : /help
         self.dp.add_handler(CommandHandler("end", end))      # function3 : /end : end conversation & rating
-        self.dp.add_handler(MessageHandler([Filters.text], echo))   #
+        #self.dp.add_handler(MessageHandler([Filters.text], echo))
+        self.dp.add_handler(MessageHandler([], echo))
         self.dp.add_error_handler(error)
 
         # Define your chatbot
