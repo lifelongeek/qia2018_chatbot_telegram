@@ -12,6 +12,7 @@ from telegram import ChatAction
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram.parsemode import ParseMode
 import datetime
+from PIL import Image
 
 import sys
 sys.path.append(os.getcwd())
@@ -81,6 +82,12 @@ class Bot:
         self.dp.add_handler(MessageHandler([Filters.text], echo))
         self.dp.add_error_handler(error)
 
+        # Get image lists
+        fp = open('images/list.txt','r')
+        self.image_list = fp.readlines()
+        self.nImage = len(self.image_list)
+        fp.close()
+
         # Define your chatbot
         self.Chatbot = Chatbot()
         logger.info('Initialization done. Start conversation by typing /start.')
@@ -109,6 +116,11 @@ def start(bot, update):
     bot.sendMessage(update.message.chat_id, 'You can type special commands such as /start, /help or /end')
 
     ai.history[sender_id] = {'context': collections.deque(maxlen=CONTEXT_SIZE),'replies': collections.deque(maxlen=REPLY_HIST_SIZE)}
+
+    img_idx = random.randrange(0,ai.nImage)
+    img_path = ai.image_list[img_idx]
+    #img = Image.open(img_path)
+    bot.sendPhoto(update.message.chat_id, img_path[:-1])
 
 def end(bot, update):
     bot.sendMessage(update.message.chat_id, 'Thanks for chatting with me. Please rate our conversation !')
