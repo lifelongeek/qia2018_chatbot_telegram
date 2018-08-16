@@ -111,16 +111,18 @@ def start(bot, update):
     md = mess2dict(update.message)
     sender_id = str(md['from']['id'])
 
+    # Send image
+    img_idx = random.randrange(0,ai.nImage)
+    img_path = ai.image_list[img_idx]
+    bot.sendPhoto(update.message.chat_id, img_path[:-1])
+
     bot.sendMessage(update.message.chat_id, "Hello. I am qia2018 bot.")
     bot.sendMessage(update.message.chat_id, "We can talk about given image, or whatever you want.")
     bot.sendMessage(update.message.chat_id, 'You can type special commands such as /start, /help or /end')
 
+    # history initialization
     ai.history[sender_id] = {'context': collections.deque(maxlen=CONTEXT_SIZE),'replies': collections.deque(maxlen=REPLY_HIST_SIZE)}
 
-    img_idx = random.randrange(0,ai.nImage)
-    img_path = ai.image_list[img_idx]
-    #img = Image.open(img_path)
-    bot.sendPhoto(update.message.chat_id, img_path[:-1])
 
 def end(bot, update):
     bot.sendMessage(update.message.chat_id, 'Thanks for chatting with me. Please rate our conversation !')
